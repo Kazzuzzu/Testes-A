@@ -1,0 +1,37 @@
+import requests
+from bs4 import BeautifulSoup
+import tkinter as tk
+from tkinter import messagebox
+
+
+def temperatura():
+    
+    cidade = entry.get()
+    search = f"Temperatura em {cidade}"
+    url = f"https://www.google.com/search?&q={search}"
+    
+    
+    r = requests.get(url)
+    r.raise_for_status()
+    
+    s = BeautifulSoup(r.text, "html.parser")
+    update = s.find("div", class_="BNeawe").text
+    
+    resultado.set(update)
+    
+    
+    
+root = tk.Tk()
+root.title("Verificador de Temperatura")
+
+
+tk.Label(root, text="Cidade:").grid(row=0, column=1, padx=16, pady=16)
+entry = tk.Entry(root)
+entry.grid(row=0, column=1, padx=16, pady=16)
+
+resultado = tk.StringVar()
+tk.Label(root, textvariable=resultado).grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+tk.Button(root, text="Verificar", command=temperatura).grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+
+root.mainloop()    
